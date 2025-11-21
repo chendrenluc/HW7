@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Connor Hendren / 002
  *
  *   This java file contains the problem solutions for the methods selectionSort,
  *   mergeSortDivisibleByKFirst, asteroidsDestroyed, and numRescueCanoes methods.
@@ -42,6 +42,25 @@ public class ProblemSolutions {
             // "SELECTION SORT" ALGORITHM.
             // DO NOT FORGET TO ADD YOUR NAME / SECTION ABOVE
 
+            //Initialize the selected index
+            int selectedIndex = 1;
+            //Make a loop to iterate through the values and reset the index
+            //Need a case for ascending order or descending
+            for(int j = i + 1; j < n; j++) {
+                if(ascending) {
+                    if(values[j] < values[selectedIndex]) {
+                        selectedIndex = j;
+                    }
+                } else {
+                    if(values[j] > values[selectedIndex]) {
+                        selectedIndex = j;
+                    }
+                }
+            }
+            //Swap the min or max that was found with the first value
+            int store = values[selectedIndex];
+            values[selectedIndex] = values[i];
+            values[i] = temp;
         }
 
     } // End class selectionSort
@@ -102,8 +121,43 @@ public class ProblemSolutions {
         // TO CODE WITH A SPACE COMPLEXITY OF O(N LOG N), WHICH IS FINE FOR PURPOSES
         // OF THIS PROGRAMMING EXERCISES.
 
-        return;
-
+        //Initialize temporary storage
+        int[] temp = new int[right - left + 1]; //Had to add a +1 to make sure size was right
+        //Initialize left and mid and a t to use
+        //This way left and mid are left untouched
+        int i = left, j = mid + 1, t = 0;
+        //Collect elements divisible by k from both halves of the array
+        //Use while loop maybe, need a way to break
+        //Probably a better way to do this
+        while(i <= mid && j <= right) {
+            if( (arr[i] % k == 0) && (arr[j] % k == 0) ) {
+                temp[t++] = (arr[i] <= arr[j]) ? arr[i++] : arr[j++];
+            } else if(arr[i] % k == 0) {
+                temp[t++] = arr[i++];
+            } else if (arr[j] % k == 0) {
+                temp[t++] = arr[j++];
+            } else {
+                break;
+            }
+        }
+        //Now use a loop to iterate and gather the rest of the values
+        //To keep complexity low, loops shouldn't be nested, keep em all on the same level
+        while(i <= mid && arr[i] % k == 0) temp[t++] = arr[i++];
+        while(j <= right && arr[j] % k == 0) temp[t++] = arr[j++];
+        //Reset i and j
+        i = left;
+        j = mid + 1;
+        //Get the rest
+        while(i <= mid && arr[i] % k != 0) {
+            temp[t++] = arr[i++];
+        }
+        while(j <= right && arr[j] % k != 0) {
+            temp[t++] = arr[j++];
+        }
+        //Finally copy all the values back to the orignal array
+        for(int p = 0; p < temp.length; p++) {
+            arr[left + p] = temp[p];
+        }
     }
 
 
@@ -156,8 +210,23 @@ public class ProblemSolutions {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT()
 
-        return false;
-
+        //This just reminds me of an old gane that was popular when I was in middle school
+        //It was called agar.io
+        //I think it's the same logic, go for all the small stuff first and don't get too greedy
+        //This should be easy since it's just the boolean comparison
+        //Sort the asteroids first
+        Arrays.sort(asteroids);
+        //Loop to iterate through the asteroids array and compare the mass
+        for(int asteroid : asteroids) {
+            if(mass >= asteroid) {
+                mass += asteroid;
+            } else {
+                //Return false if mass was not greater or at least equal to
+                return false;
+            }
+        }
+        //Return true now
+        return true;
     }
 
 
@@ -194,8 +263,26 @@ public class ProblemSolutions {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT
 
-        return -1;
-
+        //Sort the array first
+        Arrays.sort(people);
+        //Initialize two pointers for the lightest and heaviest
+        int i = 0, j = people.length - 1;
+        //Initialize counter for sleds
+        int sleds = 0;
+        //Loop for iteration from lightest to heaviest
+        //Check to see if the lightest and heaviest are less than the limit
+        while(i <= j) {
+            if(people[i] + people[j] <= limit) {
+                //Iterate
+                i++;
+            }
+            //Iterate the other end
+            j--;
+            //Add to sleds
+            sleds++;
+        }
+        //Return the sled count
+        return sleds;
     }
 
 } // End Class ProblemSolutions
