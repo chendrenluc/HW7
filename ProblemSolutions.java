@@ -43,7 +43,7 @@ public class ProblemSolutions {
             // DO NOT FORGET TO ADD YOUR NAME / SECTION ABOVE
 
             //Initialize the selected index
-            int selectedIndex = 1;
+            int selectedIndex = i;
             //Make a loop to iterate through the values and reset the index
             //Need a case for ascending order or descending
             for(int j = i + 1; j < n; j++) {
@@ -130,35 +130,50 @@ public class ProblemSolutions {
         //Use while loop maybe, need a way to break
         //Probably a better way to do this
         while(i <= mid && j <= right) {
-            if( (arr[i] % k == 0) && (arr[j] % k == 0) ) {
-                temp[t++] = (arr[i] <= arr[j]) ? arr[i++] : arr[j++];
-            } else if(arr[i] % k == 0) {
+            if(arr[i] <= arr[j]) {
                 temp[t++] = arr[i++];
-            } else if (arr[j] % k == 0) {
-                temp[t++] = arr[j++];
             } else {
-                break;
+                temp[t++] = arr[j++];
             }
         }
         //Now use a loop to iterate and gather the rest of the values
         //To keep complexity low, loops shouldn't be nested, keep em all on the same level
-        while(i <= mid && arr[i] % k == 0) temp[t++] = arr[i++];
-        while(j <= right && arr[j] % k == 0) temp[t++] = arr[j++];
-        //Reset i and j
-        i = left;
-        j = mid + 1;
-        //Get the rest
-        while(i <= mid && arr[i] % k != 0) {
+        while(i <= mid) {
             temp[t++] = arr[i++];
         }
-        while(j <= right && arr[j] % k != 0) {
+        while(j <= right) {
             temp[t++] = arr[j++];
         }
-        //Finally copy all the values back to the orignal array
+        //Copy back to original array
         for(int p = 0; p < temp.length; p++) {
             arr[left + p] = temp[p];
         }
-    }
+        //Reorder so that the values divisible by k come first
+        //NOTE: Line below didn't work, had to partition the storage to make it work
+        //NEW NOTE: It still doesn't fully work
+        //Something is wrong with the way it copies the values back to the original array but I can't figure out what
+        //int[] reorderedStorage = new int[temp.length];
+        int[] divisible = new int[temp.length];
+        int[] nonDivisible = new int[temp.length];
+        //Counters
+        int d = 0, nd = 0;
+        //Loop to iterate through array and sort them
+        for(int p = left; p <= right; p++) {
+            if(arr[p] % k == 0) {
+                divisible[d++] = arr[p];
+            } else {
+                nonDivisible[nd++] = arr[p];
+            }
+        }
+        //Finally copy the reordered array back to the original
+        int index = left;
+        for(int p = 0; p < d; p++) {
+            arr[index++] = divisible[p];
+        }
+        for(int p = 0; p < nd; p++) {
+                arr[index++] = nonDivisible[p];
+            }
+        }
 
 
     /**
@@ -286,4 +301,3 @@ public class ProblemSolutions {
     }
 
 } // End Class ProblemSolutions
-
