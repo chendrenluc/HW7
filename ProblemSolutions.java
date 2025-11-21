@@ -60,7 +60,7 @@ public class ProblemSolutions {
             //Swap the min or max that was found with the first value
             int store = values[selectedIndex];
             values[selectedIndex] = values[i];
-            values[i] = temp;
+            values[i] = store;
         }
 
     } // End class selectionSort
